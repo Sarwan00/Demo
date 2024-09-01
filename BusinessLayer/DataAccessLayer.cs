@@ -33,7 +33,7 @@ namespace BusinessLayer
                         employee.Name = reader.GetString(1); // Assuming FirstName is the second column and of type string
                         employee.City = reader.GetString(2); // Assuming LastName is the third column and of type string
                         employee.Gender = reader.GetString(3); // Assuming Department is the fourth column and of type string
-                        employee.DateOfBirth = reader.GetString(4); // Assuming HireDate is the fifth column and of type DateTime
+                        employee.DateOfBirth = reader.GetDateTime(4); // Assuming HireDate is the fifth column and of type DateTime
                         employees.Add(employee);
                     }
 
@@ -49,8 +49,8 @@ namespace BusinessLayer
 
         public void InsertEmployee(Employee employee)
         {
-            string sqlInsert = "INSERT INTO Employee (Name, City, Gender, DateOfBirth) " +
-                               "VALUES (@FirstName, @LastName, @Department, @HireDate, @Salary)";
+            string sqlInsert = "INSERT INTO People (Name, City, Gender, DOB) " +
+                               "VALUES (@Name, @City, @Gender, @DOB)";
             string connectionString = ConfigurationManager.ConnectionStrings["MyDatabaseConnectionString"].ConnectionString;
 
 
@@ -62,7 +62,7 @@ namespace BusinessLayer
                 command.Parameters.AddWithValue("@Name", employee.Name);
                 command.Parameters.AddWithValue("@City", employee.City);
                 command.Parameters.AddWithValue("@Gender", employee.Gender);
-                command.Parameters.AddWithValue("@DateOfBirth", employee.DateOfBirth);
+                command.Parameters.AddWithValue("@DOB", employee.DateOfBirth);
 
 
                 try
