@@ -24,18 +24,46 @@ namespace Demo.Controllers
             return View("Index_Get");
         }
 
-        [HttpPost]
-        [ActionName("Create")]
-        public ActionResult Index_Post(FormCollection formCollection)
+        [HttpGet]
+        [ActionName("Edit")]
+        public ActionResult Index_Edit_Get(int id)
         {
-            if (ModelState.IsValid)
+            DataAccessLayer dataAccessLayer = new DataAccessLayer();
+            Employee employee = dataAccessLayer.GetEmployeeDetails().Single(Ids => Ids.Id == id);
+            return View("Index_Edit",employee);
+        }
+
+        [HttpPost]
+        [ActionName("Edit")]
+        public ActionResult Index_Edit_Post(Employee employee)
+        {
+            TryUpdateModel(employee);
+            if(ModelState.IsValid)
             {
                 DataAccessLayer dataAccessLayer = new DataAccessLayer();
-                Employee employee = new Employee();
-                employee.Name = formCollection["name"];
-                employee.Gender = formCollection["Gender"];
-                employee.City = formCollection["City"];
-                employee.DateOfBirth = DateTime.Parse(formCollection["DateOfBirth"]);
+                dataAccessLayer.UpdateEmployee(employee);
+                return RedirectToAction("Index");
+            }
+
+             return View("Index_Edit");
+        }
+        [HttpPost]
+        [ActionName("Create")]
+        public ActionResult Index_Post(Employee employee)
+        {
+            
+            TryUpdateModel(employee);
+            if (ModelState.IsValid)
+            {
+                //DataAccessLayer dataAccessLayer = new DataAccessLayer();
+                //Employee employee = new Employee();
+                //employee.Name = formCollection["name"];
+                //employee.Gender = formCollection["Gender"];
+                //employee.City = formCollection["City"];
+                //employee.DateOfBirth = DateTime.Parse(formCollection["DateOfBirth"]);
+                //dataAccessLayer.InsertEmployee(employee);
+                
+                DataAccessLayer dataAccessLayer = new DataAccessLayer();
                 dataAccessLayer.InsertEmployee(employee);
                 return RedirectToAction("Index");
 

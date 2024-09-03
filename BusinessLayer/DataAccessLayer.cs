@@ -77,5 +77,37 @@ namespace BusinessLayer
                 }
             }
         }
+
+        public void UpdateEmployee(Employee employee)
+        {
+            string sqlInsert = "UPDATE People SET Name = @Name, Gender = @Gender,City = @City,DOB =@DateOfBirth Where Id = @Id";
+            string connectionString = ConfigurationManager.ConnectionStrings["MyDatabaseConnectionString"].ConnectionString;
+
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(sqlInsert, connection);
+
+                // Add parameters to the command
+                command.Parameters.AddWithValue("@Id", employee.Id);
+                command.Parameters.AddWithValue("@Name", employee.Name);
+                command.Parameters.AddWithValue("@City", employee.City);
+                command.Parameters.AddWithValue("@Gender", employee.Gender);
+                command.Parameters.AddWithValue("@DateOfBirth", employee.DateOfBirth);
+
+
+                try
+                {
+                    connection.Open();
+                    int rowsAffected = command.ExecuteNonQuery();
+                    Console.WriteLine($"Rows Inserted: {rowsAffected}");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error: {ex.Message}");
+                }
+            }
+
+            }
     }
 }
